@@ -26,3 +26,17 @@ jobs:
         with:
           push: true
           tags: mathieuducharme/codeboot:${{ github.run_number }}
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          containerAppName: app-codeboot-prod-canadaeast-001
+          resourceGroup: rg-codeboot-prod-001
+          registryUrl: registry.hub.docker.com
+          imageToDeploy: mathieuducharme/codeboot:${{ github.run_number }}
+          targetPort: 8000
